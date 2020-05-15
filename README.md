@@ -1,7 +1,7 @@
 # Aisle 1
 
 ## Description
-Aisle 1 is a game where the player has to move horizontally through a supermarket aisle and collect items from the shelves. The player wins if they collect everything on their grocery list. The player loses if they click on the wrong item.
+Aisle 1 is a game where the player is moving through a supermarket aisle and has to collect items from the shelves. The player wins if they collect everything on their grocery list. The player loses if they click on the wrong item.
 
 <!---The player passes each level by collecting all the items on their grocery list before reaching the end of the aisle. Each game, the player has 3 lives. Lives will be taken away each time the player clicks on a wrong item. The game is over after the player has no more lives.-->
 
