@@ -16,9 +16,7 @@ Aisle 1 is a game where the player is moving through a supermarket aisle and has
 - add scoreboard
 - 3 lives system
 - bonus items for extra points
-- animations
-    - spinning animation of item being added to cart
-    - player walking animation
+- - spinning animation of item being added to cart
 
 ## Data structure
 
@@ -54,10 +52,10 @@ Aisle 1 is a game where the player is moving through a supermarket aisle and has
 
 ## States y States Transitions
 Definition of the different states and their transition (transition functions)
--splashScreen
--gameScreen
--gameOverScreen
--winScreen
+- splashScreen
+- gameScreen
+- gameOverScreen
+- winScreen
 
 ## Task
 - main - buildDOM
