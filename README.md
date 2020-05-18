@@ -85,6 +85,7 @@ Definition of the different states and their transition (transition functions)
 ### Git
 URIs for the project repo and deploy
 [Link Repo](https://github.com/michelleytlock/aisle-1)
+[Link Deply](https://michelleytlock.github.io/aisle-1/)
 
 ### Slides
 URIs for the project presentation (slides)
