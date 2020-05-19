@@ -3,7 +3,7 @@ class Game {
     this.canvas = null;
     this.ctx = null;
 
-    this.spawnLine = 1000; //newly spawned objects start here
+    this.spawnLine = 1000; //newly spawned objects start here (x position)
 
     this.totalNumberOfItems = 14;
     this.itemTypes = [
@@ -45,8 +45,7 @@ class Game {
     this.itemsRow4 = []; //array that holds all spawned objects in Row 4
     this.itemsRow5 = []; //array that holds all spawned objects in Row 5
 
-    //shelves heights (y)
-    this.rows = [20, 110, 200, 290, 380];
+    this.rows = [20, 110, 200, 290, 380]; //shelves heights (y positions)
 
     this.gameScreen = null;
 
@@ -65,7 +64,7 @@ class Game {
     this.canvas.setAttribute("width", this.canvasWidth);
     this.canvas.setAttribute("height", this.canvasHeight);
   }
-  //draw background
+  //draw background, shopping cart, and items
   drawBg() {
     this.background = new Image();
     this.background.onload = () => {
@@ -88,6 +87,15 @@ class Game {
     };
     this.shopper.src = "./img/shoppingcart.png";
   }
+   
+  addNewItems(items, newItem) { 
+    if (items.length && items[items.length - 1].x < 600) {
+      items.push(newItem);
+    }
+    else if (!items.length) {
+      items.push(newItem);
+     }
+  }
 
   //draw items
   drawItems() {
@@ -98,9 +106,7 @@ class Game {
     let t3 = Math.floor(Math.random() * this.itemTypes.length);
     let t4 = Math.floor(Math.random() * this.itemTypes.length);
 
-    // let randomRow = Math.floor(Math.random() * this.rows.length);
-
-    //create new items into each row with randomized item type
+    //create new items and push into each row with randomized item type
     let newItem0 = new Item(
       this.canvas,
       this.itemTypes[t0],
@@ -142,7 +148,9 @@ class Game {
     );
 
     //push new items into their respective rows
-    this.itemsRow1.push(newItem0);
+    //check if previous item has reached a certain random x coordinate
+    
+    this.addNewItems(this.itemsRow1, newItem0);
     this.itemsRow2.push(newItem1);
     this.itemsRow3.push(newItem2);
     this.itemsRow4.push(newItem3);
@@ -155,7 +163,7 @@ class Game {
     newItem3.draw();
     newItem4.draw();
 
-    //draw the items in each row
+    //draw all the items in each row
     this.itemsRow1.forEach((item) => {
       item.draw();
     });
@@ -173,6 +181,7 @@ class Game {
     });
   }
 
+  //make items move their x positions
   moveItems() {
     this.itemsRow1.forEach((item) => {
       item.x -= item.speed;
@@ -215,50 +224,29 @@ class Game {
     });
   }
 
-  //draw everything
+  callEverything() { 
+    this.moveItems();
+    //this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.drawBg();
+  }
+
+  //draw everything within the interval after movement
   draw() {
     setInterval(() => {
-      this.moveItems();
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.drawBg();
-    }, 1000);
+      window.requestAnimationFrame(() => { this.callEverything() })
+    }, 10);
+  }
 
-    // for (let i = 0; i < this.items.length; i++) {
-    //   this.items[i].itemImage.onload = () => {
-    //     this.ctx.drawImage(
-    //       this.items[i].itemImage,
-    //       this.items[i].x,
-    //       this.items[i].y
-    //     );
-    //   };
-    // this.items[i].updatePosition();
-    //   this.items[i].x -= 5;
-    //   if (this.items[i].x == 850) {
-    //     this.items[i].itemImage.onload = () => {
-    //       this.ctx.drawImage(
-    //         this.items[i].itemImage,
-    //         this.items[i].x,
-    //         this.items[i].y
-    //       );
-    //     };
-    //   }
+  // get mouse coordinates
+  getMousePosition(canvas, event) {
+    this.rect = canvas.getBoundingClientRect();
+    this.x = event.clientX - this.rect.left;
+    this.y = event.clientY - this.rect.top;
+    console.log("Coordinate x: " + this.x, "Coordinate y: " + this.y);
+  }
+  
+  // clicking functionality
+  clicking() {
+    
   }
 }
-
-//get mouse coordinates
-//   getMousePosition(canvas, event) {
-//     this.rect = canvas.getBoundingClientRect();
-//     this.x = event.clientX - rect.left;
-//     this.y = event.clientY - rect.top;
-//     console.log("Coordinate x: " + x, "Coordinate y: " + y);
-
-//     // for (let i = 0; i < items.length; i++) {
-//     //     if ((x > shopperX && x < shopperX + 150) && (items[i].x > shopperX && items[i].x < shopperX + 150)) {
-//     //         ctx.clearRect(items[i].x, row1, 50, 150);
-//     //         // ctx.drawImage(bg, 0, 0);
-//     //     }
-//     // }
-//     this.canvas.addEventListener("mousedown", function (e) {
-//       getMousePosition(canvas, e);
-//     });
-//   }

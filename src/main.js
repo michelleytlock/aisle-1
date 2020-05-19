@@ -77,6 +77,7 @@ function removeGameScreen() {
     game.gameScreen.remove();
 }
 
+//start the game
 function startGame() {
     // removeSplashScreen();
     // removeGameOverScreen();
@@ -86,9 +87,14 @@ function startGame() {
 
     game.start();
     game.draw();
+    // game.clicking();
     
+    document.addEventListener("mousedown", function (e) {
+        console.log(this);
+        game.getMousePosition(game.canvas, e);
+      });
     
 }
 
-//execute main function once page loads
+//execute function main() once page loads
 window.addEventListener('load', main);
