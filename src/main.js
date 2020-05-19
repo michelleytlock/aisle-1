@@ -86,6 +86,8 @@ function startGame() {
 
     game.start();
     game.draw();
+    
+    
 }
 
 //execute main function once page loads

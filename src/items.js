@@ -6,22 +6,16 @@ class Item {
         this.height = 80;
         this.x = xPosition;
         this.y = yPosition;
-        this.speed = 3;
+        this.speed = 50;
         this.name = name;
         this.itemImage = new Image();
         this.itemImage.src = imageSrc;
     }
-
     draw() {
         this.ctx.drawImage(this.itemImage, this.x, this.y);
+        
+        
     }
-
-    updatePosition() {
-        // this.intervalId = setInterval(function () {
-        //     // requestAnimationFrame(this.draw);
-        //     this.x -= this.speed;
-        //     console.log('hi')
-        // }, 30);
-    }
+    
     
 }
