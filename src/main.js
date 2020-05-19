@@ -9,7 +9,6 @@ function buildDom(htmlString) {
 
 //Main game to load onto page
 function main() {
-  startGame();
   let game;
   let splashScreen;
 
@@ -18,7 +17,6 @@ function main() {
     splashScreen = buildDom(`
         <main>
             <div class="container">
-                <img src="">
                 <div id="title">
                     <h1>Aisle 1</h1>
                 </div>
@@ -32,6 +30,8 @@ function main() {
                 <div class="input>
                     <label for="name">Name:</label>
                     <input type="text" id="name">
+                </div>
+                <div>
                     <button id="start-button" class="button">Start</button>
                 </div>
             </div>
@@ -74,13 +74,13 @@ function main() {
   }
 
   //take away game screen
-  // function removeGameScreen() {
-  //     game.gameScreen.remove();
-  // }
+  function removeGameScreen() {
+      game.gameScreen.remove();
+  }
 
   //start the game
   function startGame() {
-    // removeSplashScreen();
+    removeSplashScreen();
     // removeGameOverScreen();
 
     let game = new Game();
@@ -93,6 +93,7 @@ function main() {
       game.getMousePosition(game.canvas, e);
     });
   }
+    createSplashScreen();
 }
 //execute function main() once page loads
 window.addEventListener("load", main);

@@ -1,3 +1,62 @@
-canvas {
-    
+body {
+    background-color: #bfdfff;
+}
+
+.container {
+    background-image: url("/img/splash.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    text-align: center;
+    height: 700px;
+}
+
+#title h1 {
+    margin-top: 30px;
+    margin-bottom: 0;
+    color: #d93f0b;
+    font-size: 100px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 800;
+}
+
+#instructions h2 {
+    color: black;
+    font-size: 35px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+#instructions p {
+    font-size: 16px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    margin-bottom: 40px;
+    color: black;
+}
+
+.input label {
+    font-size: 20px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 500;
+}
+
+.button {
+    margin-top: 30px;
+    background-color: #d93f0b;
+    border: none;
+    color: white;
+    padding: 6px 35px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    font-family: 'Raleway', sans-serif;
+    border-radius: 8px;
+    transition-duration: 0.4s;
+}
+
+.button:hover {
+    background-color: #bd0000;
 }
