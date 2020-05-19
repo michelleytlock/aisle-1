@@ -3,6 +3,9 @@ class Game {
     this.canvas = null;
     this.ctx = null;
 
+    this.shopperX = 0;
+    this.shopperY = 0;
+
     this.spawnLine = 1000; //newly spawned objects start here (x position)
 
     this.totalNumberOfItems = 14;
@@ -39,11 +42,11 @@ class Game {
       "./img/yogurt.png"
     ];
 
-    this.itemsRow1 = []; //array that holds all spawned objects in Row 1
-    this.itemsRow2 = []; //array that holds all spawned objects in Row 2
-    this.itemsRow3 = []; //array that holds all spawned objects in Row 3
-    this.itemsRow4 = []; //array that holds all spawned objects in Row 4
-    this.itemsRow5 = []; //array that holds all spawned objects in Row 5
+    this.itemsRow0 = []; //array that holds all spawned objects in Row 1
+    this.itemsRow1 = []; //array that holds all spawned objects in Row 2
+    this.itemsRow2 = []; //array that holds all spawned objects in Row 3
+    this.itemsRow3 = []; //array that holds all spawned objects in Row 4
+    this.itemsRow4 = []; //array that holds all spawned objects in Row 5
 
     this.rows = [20, 110, 200, 290, 380]; //shelves heights (y positions)
 
@@ -87,13 +90,15 @@ class Game {
     };
     this.shopper.src = "./img/shoppingcart.png";
   }
-   
-  addNewItems(items, newItem) { 
-    if (items.length && items[items.length - 1].x < 600) {
-      items.push(newItem);
+  
+  //create new items when previous item reaches certain x
+  addNewItems(itemsRow, newItem) { 
+    let randomX = Math.floor(Math.random() * 1000)
+    if (itemsRow.length && itemsRow[itemsRow.length - 1].x < randomX) { //if array has items and items
+      itemsRow.push(newItem); //push new items into their respective rows
     }
-    else if (!items.length) {
-      items.push(newItem);
+    else if (!itemsRow.length) {
+      itemsRow.push(newItem); //push new items into their respective rows
      }
   }
 
@@ -147,14 +152,13 @@ class Game {
       this.itemSrcs[t4]
     );
 
-    //push new items into their respective rows
-    //check if previous item has reached a certain random x coordinate
     
-    this.addNewItems(this.itemsRow1, newItem0);
-    this.itemsRow2.push(newItem1);
-    this.itemsRow3.push(newItem2);
-    this.itemsRow4.push(newItem3);
-    this.itemsRow5.push(newItem4);
+    //check if previous item has reached a certain random x coordinate and add, push into array
+    this.addNewItems(this.itemsRow0, newItem0);
+    this.addNewItems(this.itemsRow1, newItem1);
+    this.addNewItems(this.itemsRow2, newItem2);
+    this.addNewItems(this.itemsRow3, newItem3);
+    this.addNewItems(this.itemsRow4, newItem4);
 
     //draw the new items
     newItem0.draw();
@@ -164,6 +168,9 @@ class Game {
     newItem4.draw();
 
     //draw all the items in each row
+    this.itemsRow0.forEach((item) => {
+      item.draw();
+    });
     this.itemsRow1.forEach((item) => {
       item.draw();
     });
@@ -176,13 +183,18 @@ class Game {
     this.itemsRow4.forEach((item) => {
       item.draw();
     });
-    this.itemsRow5.forEach((item) => {
-      item.draw();
-    });
   }
 
   //make items move their x positions
   moveItems() {
+    this.itemsRow0.forEach((item) => {
+      item.x -= item.speed; //distance item is moving every frame
+
+      if (item.x < 0) {
+        this.itemsRow0.shift(); //taking out items from array when gone
+      }
+    });
+
     this.itemsRow1.forEach((item) => {
       item.x -= item.speed;
 
@@ -214,27 +226,18 @@ class Game {
         this.itemsRow4.shift();
       }
     });
-
-    this.itemsRow5.forEach((item) => {
-      item.x -= item.speed;
-
-      if (item.x < 0) {
-        this.itemsRow5.shift();
-      }
-    });
   }
 
-  callEverything() { 
+  draw() { 
     this.moveItems();
-    //this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.drawBg();
   }
 
   //draw everything within the interval after movement
-  draw() {
+  startAnimation() {
     setInterval(() => {
-      window.requestAnimationFrame(() => { this.callEverything() })
-    }, 10);
+      window.requestAnimationFrame(() => { this.draw() })
+    }, 40);
   }
 
   // get mouse coordinates
@@ -245,8 +248,17 @@ class Game {
     console.log("Coordinate x: " + this.x, "Coordinate y: " + this.y);
   }
   
-  // clicking functionality
-  clicking() {
+  //check position
+  checkItemPosition(x, y) {
+    this.itemsRow0.forEach((item) => {
+      if ((item.x > 45 && item.x < 270) && (x > item.x && x < item.x + item.width) && (y > item.y && y < item.y + item.height)) {
+        console.log('hi');
+      }
+    });
     
+    if (x === itemsRow0) {
+
+    }
   }
+  
 }

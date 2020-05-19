@@ -6,7 +6,7 @@ class Item {
         this.height = 80;
         this.x = xPosition;
         this.y = yPosition;
-        this.speed = 10;
+        this.speed = 5;
         this.name = name;
         this.itemImage = new Image();
         this.itemImage.src = imageSrc;
