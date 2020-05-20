@@ -58,6 +58,8 @@ function main() {
         
         <div class="shopping-list">
         <h1>Aisle 1</h1>
+        <h3>Score:</h3>
+        <p class="score"></p>
         <h2>Grocery List</h2>
             <ul>
                 <li><img class="item1"></li>

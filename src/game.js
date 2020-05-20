@@ -223,6 +223,7 @@ class Game {
     this.moveItems();
     this.drawBg();
     this.generateList();
+    this.generateScore();
   }
 
   //draw everything within the interval after movement
@@ -263,7 +264,7 @@ class Game {
         ) {
           this.groceryList.forEach((groceryListItem, i) => {
             if (groceryListItem.name === item.name) {
-              // this.score++;
+              this.score++;
               this.itemsRow0.splice(index, 1);
               this.groceryList.splice(i, 1);
             }
@@ -291,6 +292,7 @@ class Game {
         ) {
           this.groceryList.forEach((groceryListItem, i) => {
             if (groceryListItem.name === item.name) {
+              this.score++;
               this.itemsRow1.splice(index, 1);
               this.groceryList.splice(i, 1);
             }
@@ -319,7 +321,7 @@ class Game {
         ) {
           this.groceryList.forEach((groceryListItem, i) => {
             if (groceryListItem.name === item.name) {
-              // this.score++;
+              this.score++;
               this.itemsRow2.splice(index, 1);
               this.groceryList.splice(i, 1);
             }
@@ -347,7 +349,7 @@ class Game {
         ) {
           this.groceryList.forEach((groceryListItem, i) => {
             if (groceryListItem.name === item.name) {
-              // this.score++;
+              this.score++;
               this.itemsRow3.splice(index, 1);
               this.groceryList.splice(i, 1);
             }
@@ -375,7 +377,7 @@ class Game {
         ) {
           this.groceryList.forEach((groceryListItem, i) => {
             if (groceryListItem.name === item.name) {
-              // this.score++;
+              this.score++;
               this.itemsRow4.splice(index, 1);
               this.groceryList.splice(i, 1);
             }
@@ -407,4 +409,11 @@ class Game {
     if (this.groceryList[3]) { item4.src = this.groceryList[3].source }
     if (this.groceryList[4]) { item5.src = this.groceryList[4].source }
   }
+
+  generateScore() {
+    let scoreNum = document.querySelector(".score");
+
+    scoreNum.innerHTML = this.score;
+  }
+
 }
