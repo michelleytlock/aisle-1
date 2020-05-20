@@ -23,7 +23,7 @@ class Game {
       "pear",
       "sardines",
       "tomato",
-      "yogurt"
+      "yogurt",
     ];
     this.itemSrcs = [
       "./img/milk.png",
@@ -39,7 +39,7 @@ class Game {
       "./img/pear.png",
       "./img/sardines.png",
       "./img/tomato.png",
-      "./img/yogurt.png"
+      "./img/yogurt.png",
     ];
 
     this.itemsRow0 = []; //array that holds all spawned objects in Row 1
@@ -53,6 +53,9 @@ class Game {
     this.gameScreen = null;
 
     this.playerName = inputName;
+
+    this.mouseX = 0;
+    this.mouseY = 0;
   }
 
   start() {
@@ -90,16 +93,16 @@ class Game {
     };
     this.shopper.src = "./img/shoppingcart.png";
   }
-  
+
   //create new items when previous item reaches certain x
-  addNewItems(itemsRow, newItem) { 
-    let randomX = Math.floor(Math.random() * 1000)
-    if (itemsRow.length && itemsRow[itemsRow.length - 1].x < randomX) { //if array has items and items
+  addNewItems(itemsRow, newItem) {
+    let randomX = Math.floor(Math.random() * 1000);
+    if (itemsRow.length && itemsRow[itemsRow.length - 1].x < randomX) {
+      //if array has items and items
+      itemsRow.push(newItem); //push new items into their respective rows
+    } else if (!itemsRow.length) {
       itemsRow.push(newItem); //push new items into their respective rows
     }
-    else if (!itemsRow.length) {
-      itemsRow.push(newItem); //push new items into their respective rows
-     }
   }
 
   //draw items
@@ -152,7 +155,6 @@ class Game {
       this.itemSrcs[t4]
     );
 
-    
     //check if previous item has reached a certain random x coordinate and add, push into array
     this.addNewItems(this.itemsRow0, newItem0);
     this.addNewItems(this.itemsRow1, newItem1);
@@ -190,7 +192,7 @@ class Game {
     this.itemsRow0.forEach((item) => {
       item.x -= item.speed; //distance item is moving every frame
 
-      if (item.x < 0) {
+      if (item.x + item.width < 0) {
         this.itemsRow0.shift(); //taking out items from array when gone
       }
     });
@@ -198,7 +200,7 @@ class Game {
     this.itemsRow1.forEach((item) => {
       item.x -= item.speed;
 
-      if (item.x < 0) {
+      if (item.x + item.width < 0) {
         this.itemsRow1.shift();
       }
     });
@@ -206,7 +208,7 @@ class Game {
     this.itemsRow2.forEach((item) => {
       item.x -= item.speed;
 
-      if (item.x < 0) {
+      if (item.x + item.width < 0) {
         this.itemsRow2.shift();
       }
     });
@@ -214,7 +216,7 @@ class Game {
     this.itemsRow3.forEach((item) => {
       item.x -= item.speed;
 
-      if (item.x < 0) {
+      if (item.x + item.width < 0) {
         this.itemsRow3.shift();
       }
     });
@@ -222,13 +224,13 @@ class Game {
     this.itemsRow4.forEach((item) => {
       item.x -= item.speed;
 
-      if (item.x < 0) {
+      if (item.x + item.width < 0) {
         this.itemsRow4.shift();
       }
     });
   }
 
-  draw() { 
+  draw() {
     this.moveItems();
     this.drawBg();
   }
@@ -236,29 +238,76 @@ class Game {
   //draw everything within the interval after movement
   startAnimation() {
     setInterval(() => {
-      window.requestAnimationFrame(() => { this.draw() })
+      window.requestAnimationFrame(() => {
+        this.draw();
+      });
     }, 40);
   }
 
   // get mouse coordinates
   getMousePosition(canvas, event) {
     this.rect = canvas.getBoundingClientRect();
-    this.x = event.clientX - this.rect.left;
-    this.y = event.clientY - this.rect.top;
-    console.log("Coordinate x: " + this.x, "Coordinate y: " + this.y);
+    this.mouseX = event.clientX - this.rect.left;
+    this.mouseY = event.clientY - this.rect.top;
+    // console.log("Coordinate x: " + this.mouseX, "Coordinate y: " + this.mouseY);
   }
-  
-  //check position
-  checkItemPosition(x, y) {
-    this.itemsRow0.forEach((item) => {
-      if ((item.x > 45 && item.x < 270) && (x > item.x && x < item.x + item.width) && (y > item.y && y < item.y + item.height)) {
-        console.log('hi');
-      }
-    });
-    
-    if (x === itemsRow0) {
 
-    }
+  //check position
+  checkItemPosition() {
+    if (this.mouseX >= 45 && this.mouseX <= 270 && this.mouseY >= this.rows[0] && this.mouseY <= this.rows[0] + 80) { //check if mouse is in row 1
+      this.itemsRow0.forEach((item) => { //loop through row
+        if (item.x >= 45 && item.x <= 270 && this.mouseX >= item.x && this.mouseX <= item.x + item.width && this.mouseY >= item.y && this.mouseY <= item.y + item.height) {
+          this.itemsRow0.splice(this.itemsRow0[item], 1);
+        };
+      });
+    };
+
+    if (this.mouseX >= 45 && this.mouseX <= 270 && this.mouseY >= this.rows[1] && this.mouseY <= this.rows[1] + 80) { //check if mouse is in row 2
+      this.itemsRow1.forEach((item) => { //loop through row
+        if (item.x >= 45 && item.x <= 270 && this.mouseX >= item.x && this.mouseX <= item.x + item.width && this.mouseY >= item.y && this.mouseY <= item.y + item.height) {
+          this.itemsRow1.splice(this.itemsRow1[item], 1);
+        };
+      });
+    };
+
+    if (this.mouseX >= 45 && this.mouseX <= 270 && this.mouseY >= this.rows[2] && this.mouseY <= this.rows[2] + 80) { //check if mouse is in row 3
+      this.itemsRow2.forEach((item) => { //loop through row
+        if (item.x >= 45 && item.x <= 270 && this.mouseX >= item.x && this.mouseX <= item.x + item.width && this.mouseY >= item.y && this.mouseY <= item.y + item.height) {
+          this.itemsRow2.splice(this.itemsRow2[item], 1);
+        };
+      });
+    };
+
+    if (this.mouseX >= 45 && this.mouseX <= 270 && this.mouseY >= this.rows[3] && this.mouseY <= this.rows[3] + 80) { //check if mouse is in row 4
+      this.itemsRow3.forEach((item) => { //loop through row
+        if (item.x >= 45 && item.x <= 270 && this.mouseX >= item.x && this.mouseX <= item.x + item.width && this.mouseY >= item.y && this.mouseY <= item.y + item.height) {
+          this.itemsRow3.splice(this.itemsRow3[item], 1);
+        };
+      });
+    };
+
+    if (this.mouseX >= 45 && this.mouseX <= 270 && this.mouseY >= this.rows[4] && this.mouseY <= this.rows[4] + 80) { //check if mouse is in row 5
+      this.itemsRow4.forEach((item) => { //loop through row
+        if (item.x >= 45 && item.x <= 270 && this.mouseX >= item.x && this.mouseX <= item.x + item.width && this.mouseY >= item.y && this.mouseY <= item.y + item.height) {
+          this.itemsRow4.splice(this.itemsRow4[item], 1);
+        };
+      });
+    };
+
+
+
+
+
+
   }
-  
+
+  // this.itemsRow0.forEach((item) => {
+  //   if ((item.x > 45 && item.x < 270) && (x > item.x && x < item.x + item.width) && (y > item.y && y < item.y + item.height)) {
+  //     console.log('hi');
+  //   }
+  // });
+
+  // if (x === itemsRow0) {
+
+  // }
 }

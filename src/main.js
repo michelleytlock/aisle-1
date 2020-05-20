@@ -91,6 +91,7 @@ function main() {
 
     game.canvas.addEventListener("mousedown", function (e) {
       game.getMousePosition(game.canvas, e);
+      game.checkItemPosition();
     });
   }
     createSplashScreen();
