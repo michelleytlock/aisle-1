@@ -9,37 +9,22 @@ class Game {
     this.spawnLine = 1000; //newly spawned objects start here (x position)
 
     this.totalNumberOfItems = 14;
-    this.itemTypes = [
-      "milk",
-      "cheese",
-      "broccoli",
-      "chocolate-milk",
-      "corn",
-      "jam",
-      "ketchup",
-      "lemon",
-      "lettuce",
-      "orange-juice",
-      "pear",
-      "sardines",
-      "tomato",
-      "yogurt",
-    ];
-    this.itemSrcs = [
-      "./img/milk.png",
-      "./img/cheese.png",
-      "./img/broccoli.png",
-      "./img/chocolate-milk.png",
-      "./img/corn.png",
-      "./img/jam.png",
-      "./img/ketchup.png",
-      "./img/lemon.png",
-      "./img/lettuce.png",
-      "./img/orange-juice.png",
-      "./img/pear.png",
-      "./img/sardines.png",
-      "./img/tomato.png",
-      "./img/yogurt.png",
+
+    this.items = [
+      { name: "milk", source: "./img/milk.png" },
+      { name: "cheese", source: "./img/cheese.png" },
+      { name: "broccoli", source: "./img/broccoli.png" },
+      { name: "chocolate-milk", source: "./img/chocolate-milk.png" },
+      { name: "corn", source: "./img/corn.png" },
+      { name: "jam", source: "./img/jam.png" },
+      { name: "ketchup", source: "./img/ketchup.png" },
+      { name: "lemon", source: "./img/lemon.png" },
+      { name: "lettuce", source: "./img/lettuce.png" },
+      { name: "orange-juice", source: "./img/orange-juice.png" },
+      { name: "pear", source: "./img/pear.png" },
+      { name: "sardines", source: "./img/sardines.png" },
+      { name: "tomato", source: "./img/tomato.png" },
+      { name: "yogurt", source: "./img/yogurt.png" },
     ];
 
     this.itemsRow0 = []; //array that holds all spawned objects in Row 1
@@ -56,6 +41,10 @@ class Game {
 
     this.mouseX = 0;
     this.mouseY = 0;
+
+    this.groceryList = [];
+
+    this.score = 0;
   }
 
   start() {
@@ -108,51 +97,51 @@ class Game {
   //draw items
   drawItems() {
     //randomize type of item
-    let t0 = Math.floor(Math.random() * this.itemTypes.length);
-    let t1 = Math.floor(Math.random() * this.itemTypes.length);
-    let t2 = Math.floor(Math.random() * this.itemTypes.length);
-    let t3 = Math.floor(Math.random() * this.itemTypes.length);
-    let t4 = Math.floor(Math.random() * this.itemTypes.length);
+    let t0 = Math.floor(Math.random() * this.items.length);
+    let t1 = Math.floor(Math.random() * this.items.length);
+    let t2 = Math.floor(Math.random() * this.items.length);
+    let t3 = Math.floor(Math.random() * this.items.length);
+    let t4 = Math.floor(Math.random() * this.items.length);
 
     //create new items and push into each row with randomized item type
     let newItem0 = new Item(
       this.canvas,
-      this.itemTypes[t0],
+      this.items[t0].name,
       this.spawnLine,
       this.rows[0],
-      this.itemSrcs[t0]
+      this.items[t0].source
     );
 
     let newItem1 = new Item(
       this.canvas,
-      this.itemTypes[t1],
+      this.items[t1].name,
       this.spawnLine,
       this.rows[1],
-      this.itemSrcs[t1]
+      this.items[t1].source
     );
 
     let newItem2 = new Item(
       this.canvas,
-      this.itemTypes[t2],
+      this.items[t2].name,
       this.spawnLine,
       this.rows[2],
-      this.itemSrcs[t2]
+      this.items[t2].source
     );
 
     let newItem3 = new Item(
       this.canvas,
-      this.itemTypes[t3],
+      this.items[t3].name,
       this.spawnLine,
       this.rows[3],
-      this.itemSrcs[t3]
+      this.items[t3].source
     );
 
     let newItem4 = new Item(
       this.canvas,
-      this.itemTypes[t4],
+      this.items[t4].name,
       this.spawnLine,
       this.rows[4],
-      this.itemSrcs[t4]
+      this.items[t4].source
     );
 
     //check if previous item has reached a certain random x coordinate and add, push into array
@@ -233,6 +222,7 @@ class Game {
   draw() {
     this.moveItems();
     this.drawBg();
+    this.generateList();
   }
 
   //draw everything within the interval after movement
@@ -241,7 +231,7 @@ class Game {
       window.requestAnimationFrame(() => {
         this.draw();
       });
-    }, 40);
+    }, 30);
   }
 
   // get mouse coordinates
@@ -252,62 +242,169 @@ class Game {
     // console.log("Coordinate x: " + this.mouseX, "Coordinate y: " + this.mouseY);
   }
 
-  //check position
+  //check mouse position with items
   checkItemPosition() {
-    if (this.mouseX >= 45 && this.mouseX <= 270 && this.mouseY >= this.rows[0] && this.mouseY <= this.rows[0] + 80) { //check if mouse is in row 1
-      this.itemsRow0.forEach((item) => { //loop through row
-        if (item.x >= 45 && item.x <= 270 && this.mouseX >= item.x && this.mouseX <= item.x + item.width && this.mouseY >= item.y && this.mouseY <= item.y + item.height) {
-          this.itemsRow0.splice(this.itemsRow0[item], 1);
-        };
+    if (
+      this.mouseX >= 45 &&
+      this.mouseX <= 270 &&
+      this.mouseY >= this.rows[0] &&
+      this.mouseY <= this.rows[0] + 80
+    ) {
+      //check if mouse is in row 1
+      this.itemsRow0.forEach((item, index) => {
+        //loop through row
+        if (
+          item.x >= 45 &&
+          item.x <= 270 &&
+          this.mouseX >= item.x &&
+          this.mouseX <= item.x + item.width &&
+          this.mouseY >= item.y &&
+          this.mouseY <= item.y + item.height
+        ) {
+          this.groceryList.forEach((groceryListItem, i) => {
+            if (groceryListItem.name === item.name) {
+              // this.score++;
+              this.itemsRow0.splice(index, 1);
+              this.groceryList.splice(i, 1);
+            }
+          });
+        }
       });
     };
 
-    if (this.mouseX >= 45 && this.mouseX <= 270 && this.mouseY >= this.rows[1] && this.mouseY <= this.rows[1] + 80) { //check if mouse is in row 2
-      this.itemsRow1.forEach((item) => { //loop through row
-        if (item.x >= 45 && item.x <= 270 && this.mouseX >= item.x && this.mouseX <= item.x + item.width && this.mouseY >= item.y && this.mouseY <= item.y + item.height) {
-          this.itemsRow1.splice(this.itemsRow1[item], 1);
-        };
+    if (
+      this.mouseX >= 45 &&
+      this.mouseX <= 270 &&
+      this.mouseY >= this.rows[1] &&
+      this.mouseY <= this.rows[1] + 80
+    ) {
+      //check if mouse is in row 2
+      this.itemsRow1.forEach((item, index) => {
+        //loop through row
+        if (
+          item.x >= 45 &&
+          item.x <= 270 &&
+          this.mouseX >= item.x &&
+          this.mouseX <= item.x + item.width &&
+          this.mouseY >= item.y &&
+          this.mouseY <= item.y + item.height
+        ) {
+          this.groceryList.forEach((groceryListItem, i) => {
+            if (groceryListItem.name === item.name) {
+              this.itemsRow1.splice(index, 1);
+              this.groceryList.splice(i, 1);
+            }
+          })
+          
+        }
       });
-    };
+    }
 
-    if (this.mouseX >= 45 && this.mouseX <= 270 && this.mouseY >= this.rows[2] && this.mouseY <= this.rows[2] + 80) { //check if mouse is in row 3
-      this.itemsRow2.forEach((item) => { //loop through row
-        if (item.x >= 45 && item.x <= 270 && this.mouseX >= item.x && this.mouseX <= item.x + item.width && this.mouseY >= item.y && this.mouseY <= item.y + item.height) {
-          this.itemsRow2.splice(this.itemsRow2[item], 1);
-        };
+    if (
+      this.mouseX >= 45 &&
+      this.mouseX <= 270 &&
+      this.mouseY >= this.rows[2] &&
+      this.mouseY <= this.rows[2] + 80
+    ) {
+      //check if mouse is in row 3
+      this.itemsRow2.forEach((item, index) => {
+        //loop through row
+        if (
+          item.x >= 45 &&
+          item.x <= 270 &&
+          this.mouseX >= item.x &&
+          this.mouseX <= item.x + item.width &&
+          this.mouseY >= item.y &&
+          this.mouseY <= item.y + item.height
+        ) {
+          this.groceryList.forEach((groceryListItem, i) => {
+            if (groceryListItem.name === item.name) {
+              // this.score++;
+              this.itemsRow2.splice(index, 1);
+              this.groceryList.splice(i, 1);
+            }
+          });
+        }
       });
-    };
+    }
 
-    if (this.mouseX >= 45 && this.mouseX <= 270 && this.mouseY >= this.rows[3] && this.mouseY <= this.rows[3] + 80) { //check if mouse is in row 4
-      this.itemsRow3.forEach((item) => { //loop through row
-        if (item.x >= 45 && item.x <= 270 && this.mouseX >= item.x && this.mouseX <= item.x + item.width && this.mouseY >= item.y && this.mouseY <= item.y + item.height) {
-          this.itemsRow3.splice(this.itemsRow3[item], 1);
-        };
+    if (
+      this.mouseX >= 45 &&
+      this.mouseX <= 270 &&
+      this.mouseY >= this.rows[3] &&
+      this.mouseY <= this.rows[3] + 80
+    ) {
+      //check if mouse is in row 4
+      this.itemsRow3.forEach((item, index) => {
+        //loop through row
+        if (
+          item.x >= 45 &&
+          item.x <= 270 &&
+          this.mouseX >= item.x &&
+          this.mouseX <= item.x + item.width &&
+          this.mouseY >= item.y &&
+          this.mouseY <= item.y + item.height
+        ) {
+          this.groceryList.forEach((groceryListItem, i) => {
+            if (groceryListItem.name === item.name) {
+              // this.score++;
+              this.itemsRow3.splice(index, 1);
+              this.groceryList.splice(i, 1);
+            }
+          });
+        }
       });
-    };
+    }
 
-    if (this.mouseX >= 45 && this.mouseX <= 270 && this.mouseY >= this.rows[4] && this.mouseY <= this.rows[4] + 80) { //check if mouse is in row 5
-      this.itemsRow4.forEach((item) => { //loop through row
-        if (item.x >= 45 && item.x <= 270 && this.mouseX >= item.x && this.mouseX <= item.x + item.width && this.mouseY >= item.y && this.mouseY <= item.y + item.height) {
-          this.itemsRow4.splice(this.itemsRow4[item], 1);
-        };
+    if (
+      this.mouseX >= 45 &&
+      this.mouseX <= 270 &&
+      this.mouseY >= this.rows[4] &&
+      this.mouseY <= this.rows[4] + 80
+    ) {
+      //check if mouse is in row 5
+      this.itemsRow4.forEach((item, index) => {
+        //loop through row
+        if (
+          item.x >= 45 &&
+          item.x <= 270 &&
+          this.mouseX >= item.x &&
+          this.mouseX <= item.x + item.width &&
+          this.mouseY >= item.y &&
+          this.mouseY <= item.y + item.height
+        ) {
+          this.groceryList.forEach((groceryListItem, i) => {
+            if (groceryListItem.name === item.name) {
+              // this.score++;
+              this.itemsRow4.splice(index, 1);
+              this.groceryList.splice(i, 1);
+            }
+          });
+        }
       });
-    };
-
-
-
-
-
-
+    }
   }
 
-  // this.itemsRow0.forEach((item) => {
-  //   if ((item.x > 45 && item.x < 270) && (x > item.x && x < item.x + item.width) && (y > item.y && y < item.y + item.height)) {
-  //     console.log('hi');
-  //   }
-  // });
+  //grocery list
+  generateList() {
+    let item1 = document.querySelector(".item1");
+    let item2 = document.querySelector(".item2");
+    let item3 = document.querySelector(".item3");
+    let item4 = document.querySelector(".item4");
+    let item5 = document.querySelector(".item5");
 
-  // if (x === itemsRow0) {
+    if (this.groceryList.length < 5) {
+      let randomIndex = Math.floor(Math.random() * this.items.length);
 
-  // }
+      if (!this.groceryList.includes(this.items[randomIndex])) {
+        this.groceryList.push(this.items[randomIndex]);
+      }
+    }
+
+    if (this.groceryList[0]) { item1.src = this.groceryList[0].source }
+    if (this.groceryList[1]) { item2.src = this.groceryList[1].source }
+    if (this.groceryList[2]) { item3.src = this.groceryList[2].source }
+    if (this.groceryList[3]) { item4.src = this.groceryList[3].source }
+    if (this.groceryList[4]) { item5.src = this.groceryList[4].source }
+  }
 }

@@ -55,13 +55,16 @@ function main() {
   function createGameScreen() {
     let gameScreen = buildDom(`
     <main class="game game-container">
+        
         <div class="shopping-list">
+        <h1>Aisle 1</h1>
+        <h2>Grocery List</h2>
             <ul>
-                <li>Item 1</li>
-                <li>Item 2</li>
-                <li>Item 3</li>
-                <li>Item 4</li>
-                <li>Item 5</li>
+                <li><img class="item1"></li>
+                <li><img class="item2"></li>
+                <li><img class="item3"></li>
+                <li><img class="item4"></li>
+                <li><img class="item5"></li>
             </ul>
         </div>
         <div class="canvas-container">
