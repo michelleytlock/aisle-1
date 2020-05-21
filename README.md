@@ -1,7 +1,7 @@
 # Aisle 1
 
 ## Description
-Aisle 1 is a game where the player is moving through a supermarket aisle and has to collect items from the shelves. The player wins if they collect everything on their grocery list. The player loses if they click on the wrong item.
+Aisle 1 is a game where the player is moving through a supermarket aisle and has to collect items from the shelves. The player wins if they collect as many things as possible in the allocated time. The player loses if they fail to collect any items before time's up.
 
 <!---The player passes each level by collecting all the items on their grocery list before reaching the end of the aisle. Each game, the player has 3 lives. Lives will be taken away each time the player clicks on a wrong item. The game is over after the player has no more lives.-->
 
@@ -12,75 +12,75 @@ Aisle 1 is a game where the player is moving through a supermarket aisle and has
 - grocery list
 
 ## Backlog
-- increasing difficulty levels
 - add scoreboard
-- 3 lives system
-- bonus items for extra points
-- - spinning animation of item being added to cart
+- local storage
+- increasing difficulty
 
 ## Data structure
 
 # index.html
 
 # main.js
-- buildSplashScreen () {}
-- buildGameScreen () {}
-- buildEndGameScreen () {}
-- buildGameOverScreen () {}
+- createSplashScreen () {}
+- removeSplashScreen () {}
+- createGameScreen () {}
+- removeGameScreen () {}
+- createGameOverScreen () {}
+- removeGameOverScreen () {}
+- startGame () {}
+- gameOver () {}
 
 # game.js
 - Game () {}
-- drawCanvas () {}
-- updateCanvas () {}
-- clearCanvas () {}
-- startLoop () {}
-- gameOver () {}
-
-# shopper.js
+- start () {}
+- drawElements () {}
+- drawShopper () {}
+- drawItems () {}
+- moveItems () {}
 - draw () {}
-- addEventListener () {}
+- startTimer () {}
+- startAnimation () {}
+- getMousePosition () {}
+- checkPositions () {}
+- generateList () {}
+- generateScore () {}
+- updateScore () {}
 
 # items.js
+- Item () {}
 - draw () {}
-- startLoop () {}
-- checkCollision () {}
-
-# groceryList.js
-- drawCanvas () {}
-- draw () {}
-- checkOff () {}
 
 ## States y States Transitions
 Definition of the different states and their transition (transition functions)
 - splashScreen
 - gameScreen
 - gameOverScreen
-- winScreen
 
 ## Task
 - main - buildDOM
 - main - buildSplashScreen
 - main - buildGameScreen
 - main - buildGameOverScreen
-- main - buildWinScreen
 - main - addEventListener
-- game - drawCanvas
-- game - updateCanvas
-- game - clearCanvas
-- game - startLoop
-- shopper - draw
-- shopper - addEventListener
+- main - startGame
+- main - gameOver
+- game - Game 
+- game - start
+- game - draw
+- game - moveItems
+- game - startTimer
+- game - startAnimation
+- game - getMousePosition
+- game - checkPositions
+- game - generateList
+- game - generateScore
+- items - Item
 - items - draw
-- items - startLoop
-- items - checkCollision
-- groceryList - draw
-- groceryList - checkOff
-- game - gameOver
 
 ## Links
 
 ### Trello
-[Link url](https://trello.com/b/Sq0xQB4e/aisle-1)
+[Link Url](https://trello.com/b/Sq0xQB4e/aisle-1)
 
 ### Git
 URIs for the project repo and deploy
@@ -88,4 +88,4 @@ URIs for the project repo and deploy
 [Link Deploy](https://michelleytlock.github.io/aisle-1/)
 
 ### Slides
-URIs for the project presentation (slides)
+[Link Slides](https://docs.google.com/presentation/d/1GkHE8UUCGrEzh9k2X6jW1y6jo9zjc56tNBPIM-3jwdY/edit?usp=sharing)

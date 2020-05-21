@@ -49,7 +49,7 @@ class Game {
     this.groceryList = []; //array that holds grocery list items player needs to search for
 
     this.score = 0;
-    this.time = 1;
+    this.time = 30;
 
     this.timerInterval;
     this.gameInterval;
@@ -57,9 +57,10 @@ class Game {
     this.gameOverCallback = gameOverCallback;
 
     //Sounds
-    // this.music = new Audio("./sounds/game-screen-music.mp3");
-    // this.clickItem = new Audio("./sounds/click.ogg");
-    // this.timer = new Audio();
+    this.music = new Audio("./sounds/game-screen-music.mp3");
+    this.music.volume = 0.1;
+    this.music.loop = true;
+    this.clickItem = new Audio("./sounds/click.ogg");
   }
 
   //master game starting function that's called in main.js
@@ -77,7 +78,7 @@ class Game {
 
     //draw everything else and start game animation
     this.startAnimation();
-    // this.music.play();
+    this.music.play();
   }
 
   //draw everything: background, shopping cart, and items
@@ -122,16 +123,6 @@ class Game {
       item.draw();
     });
   }
-
-  // createNewItem(newItem, itemType, row, source) {
-  //   newItem = new Item(
-  //     this.canvas,
-  //     itemType,
-  //     this.spawnLine,
-  //     row,
-  //     source
-  //   );
-  // }
 
   //draw items
   drawItems() {
@@ -250,7 +241,7 @@ class Game {
       window.requestAnimationFrame(() => {
         this.draw();
       });
-    }, 30);
+    }, 25);
   }
 
   // get mouse coordinates
@@ -318,6 +309,7 @@ class Game {
     } else if (this.time === 0) {
       clearInterval(this.timerInterval);
       clearInterval(this.gameInterval);
+      this.music.pause();
       this.gameOverCallback(this.score);
       this.updateScore(this.playerName, this.score);
     }
@@ -335,7 +327,6 @@ class Game {
   }
 
   updateScore(playerName, gameScore) {
-
     let scoreArray = JSON.parse(localStorage.getItem("score")) || [];
 
     let newScore = {
@@ -358,34 +349,5 @@ class Game {
     scoreArray.splice(5);
 
     localStorage.setItem('score', JSON.stringify(scoreArray));
-    
-    // let previousScoreArray = JSON.parse(localStorage.getItem("score"));
-
-    // let newScoreArray;
-
-    // if (!previousScoreArray) {
-    //   newScoreArray = [];
-    // } else {
-    //   newScoreArray = [...previousScoreArray];
-    // }
-
-    // let newScore = { name: inputName, score: gameScore };
-    // newScoreArray.push(newScore);
-
-    // newScoreArray.sort((a, b) => {
-    //   if (a.score < b.score) {
-    //     return 1;
-    //   } else if (a.score > b.score) {
-    //     return -1;
-    //   } else {
-    //     return 0;
-    //   };
-    // });
-
-    // if (newScoreArray.length > 5) {
-    //   newScoreArray.splice(0, 5);
-    // }
-
-    // localStorage.setItem("score", JSON.stringify(newScoreArray));
   }
 }

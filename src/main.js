@@ -18,7 +18,7 @@ function main() {
   function createSplashScreen() {
     splashScreen = buildDom(`
         <main>
-            <audio autoplay loop>
+            <audio autoplay loop id="splash-screen-music">
               <source src="./sounds/splash-screen-music.mp3" type="audio/mpeg">
             </audio>
             <div class="splash">
@@ -45,6 +45,9 @@ function main() {
     document.body.appendChild(splashScreen);
 
     let startButton = splashScreen.querySelector("#start-button");
+
+    let music = document.getElementById("splash-screen-music");
+    music.volume = 0.2;
 
     function clickSound() {
       let click = new Audio("./sounds/button.ogg");
@@ -136,6 +139,9 @@ function main() {
 
     gameOverScreen = buildDom(`
     <main>
+      <audio autoplay loop id="game-over-music">
+          <source src="./sounds/game-over-screen-music.mp3" type="audio/mpeg" >
+      </audio>
       <div class="game-over-image">
         <div class="game-over-content">
           <div>
@@ -167,9 +173,20 @@ function main() {
 
     document.body.appendChild(gameOverScreen);
 
+    let music = document.getElementById("game-over-music");
+    music.volume = 0.1;
+
     let button = gameOverScreen.querySelector("button");
 
-    button.addEventListener("click", startGame);
+    function clickSound() {
+      let click = new Audio("./sounds/button.ogg");
+      click.play();
+    }
+
+    button.addEventListener("click", function () {
+      startGame();
+      clickSound();
+    });
   }
 
   function removeGameOverScreen() {
