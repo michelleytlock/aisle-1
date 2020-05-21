@@ -7,9 +7,9 @@ class Game {
     this.shopperY = 0;
 
     this.spawnLine = 1000; //newly spawned objects start here (x position)
+    this.rows = [20, 110, 200, 290, 380]; //shelves heights (y positions)
 
-    this.totalNumberOfItems = 14;
-
+    this.totalNumberOfItems = 20;
     this.items = [
       { name: "milk", source: "./img/milk.png" },
       { name: "cheese", source: "./img/cheese.png" },
@@ -25,6 +25,12 @@ class Game {
       { name: "sardines", source: "./img/sardines.png" },
       { name: "tomato", source: "./img/tomato.png" },
       { name: "yogurt", source: "./img/yogurt.png" },
+      { name: "olive-oil", source: "./img/olive-oil.png" },
+      { name: "pasta", source: "./img/pasta.png" },
+      { name: "apple", source: "./img/apple.png" },
+      { name: "carrot", source: "./img/carrot.png" },
+      { name: "eggplant", source: "./img/eggplant.png" },
+      { name: "soy-sauce", source: "./img/soy-sauce.png" },
     ];
 
     this.itemsRow0 = []; //array that holds all spawned objects in Row 1
@@ -33,8 +39,6 @@ class Game {
     this.itemsRow3 = []; //array that holds all spawned objects in Row 4
     this.itemsRow4 = []; //array that holds all spawned objects in Row 5
 
-    this.rows = [20, 110, 200, 290, 380]; //shelves heights (y positions)
-
     this.gameScreen = null;
 
     this.playerName = inputName;
@@ -42,11 +46,12 @@ class Game {
     this.mouseX = 0;
     this.mouseY = 0;
 
-    this.groceryList = [];
+    this.groceryList = []; //array that holds grocery list items player needs to search for
 
     this.score = 0;
   }
 
+  //master game starting function that's called in main.js
   start() {
     //create canvas
     this.canvasContainer = document.querySelector(".canvas-container");
@@ -58,9 +63,13 @@ class Game {
 
     this.canvas.setAttribute("width", this.canvasWidth);
     this.canvas.setAttribute("height", this.canvasHeight);
+
+    //draw everything else and start game animation
+    this.startAnimation();
   }
-  //draw background, shopping cart, and items
-  drawBg() {
+
+  //draw everything: background, shopping cart, and items
+  drawElements() {
     this.background = new Image();
     this.background.onload = () => {
       this.ctx.drawImage(this.background, 0, 0);
@@ -83,6 +92,8 @@ class Game {
     this.shopper.src = "./img/shoppingcart.png";
   }
 
+  //DRAW ITEM FUNCTIONS: addNewItems(), drawItemsInEachRow(), *drawItems()*, moveEachRowItems(), *moveItems()*
+
   //create new items when previous item reaches certain x
   addNewItems(itemsRow, newItem) {
     let randomX = Math.floor(Math.random() * 1000);
@@ -94,16 +105,32 @@ class Game {
     }
   }
 
+  drawItemsInEachRow(itemsRow) {
+    itemsRow.forEach((item) => {
+      item.draw();
+    });
+  }
+
+  // createNewItem(newItem, itemType, row, source) {
+  //   newItem = new Item(
+  //     this.canvas,
+  //     itemType,
+  //     this.spawnLine,
+  //     row,
+  //     source
+  //   );
+  // }
+
   //draw items
   drawItems() {
-    //randomize type of item
+    //randomize item
     let t0 = Math.floor(Math.random() * this.items.length);
     let t1 = Math.floor(Math.random() * this.items.length);
     let t2 = Math.floor(Math.random() * this.items.length);
     let t3 = Math.floor(Math.random() * this.items.length);
     let t4 = Math.floor(Math.random() * this.items.length);
 
-    //create new items and push into each row with randomized item type
+    //create the random items and push into every row
     let newItem0 = new Item(
       this.canvas,
       this.items[t0].name,
@@ -159,74 +186,42 @@ class Game {
     newItem4.draw();
 
     //draw all the items in each row
-    this.itemsRow0.forEach((item) => {
-      item.draw();
-    });
-    this.itemsRow1.forEach((item) => {
-      item.draw();
-    });
-    this.itemsRow2.forEach((item) => {
-      item.draw();
-    });
-    this.itemsRow3.forEach((item) => {
-      item.draw();
-    });
-    this.itemsRow4.forEach((item) => {
-      item.draw();
-    });
+    this.drawItemsInEachRow(this.itemsRow0);
+    this.drawItemsInEachRow(this.itemsRow1);
+    this.drawItemsInEachRow(this.itemsRow2);
+    this.drawItemsInEachRow(this.itemsRow3);
+    this.drawItemsInEachRow(this.itemsRow4);
   }
 
-  //make items move their x positions
+  //look through each row and move every single item. remove if item is off canvas.
+  moveEachRowItems(row) {
+    row.forEach((item) => {
+      item.x -= item.speed;
+
+      if (item.x + item.width < 0) {
+        row.shift();
+      };
+    })
+  }
+
+  //make all items move their x positions
   moveItems() {
-    this.itemsRow0.forEach((item) => {
-      item.x -= item.speed; //distance item is moving every frame
-
-      if (item.x + item.width < 0) {
-        this.itemsRow0.shift(); //taking out items from array when gone
-      }
-    });
-
-    this.itemsRow1.forEach((item) => {
-      item.x -= item.speed;
-
-      if (item.x + item.width < 0) {
-        this.itemsRow1.shift();
-      }
-    });
-
-    this.itemsRow2.forEach((item) => {
-      item.x -= item.speed;
-
-      if (item.x + item.width < 0) {
-        this.itemsRow2.shift();
-      }
-    });
-
-    this.itemsRow3.forEach((item) => {
-      item.x -= item.speed;
-
-      if (item.x + item.width < 0) {
-        this.itemsRow3.shift();
-      }
-    });
-
-    this.itemsRow4.forEach((item) => {
-      item.x -= item.speed;
-
-      if (item.x + item.width < 0) {
-        this.itemsRow4.shift();
-      }
-    });
+    this.moveEachRowItems(this.itemsRow0);
+    this.moveEachRowItems(this.itemsRow1);
+    this.moveEachRowItems(this.itemsRow2);
+    this.moveEachRowItems(this.itemsRow3);
+    this.moveEachRowItems(this.itemsRow4);
   }
 
+  //master draw function, draw EVERYTHING including elements, moving items, grocery list and score
   draw() {
     this.moveItems();
-    this.drawBg();
+    this.drawElements();
     this.generateList();
     this.generateScore();
   }
 
-  //draw everything within the interval after movement
+  //draw everything in intervals
   startAnimation() {
     setInterval(() => {
       window.requestAnimationFrame(() => {
@@ -243,16 +238,16 @@ class Game {
     // console.log("Coordinate x: " + this.mouseX, "Coordinate y: " + this.mouseY);
   }
 
-  //check mouse position with items
-  checkItemPosition() {
+  //check mouse position with each row of items
+  checkEachRowPositions(row, rowPosition) {
     if (
       this.mouseX >= 45 &&
       this.mouseX <= 270 &&
-      this.mouseY >= this.rows[0] &&
-      this.mouseY <= this.rows[0] + 80
+      this.mouseY >= rowPosition &&
+      this.mouseY <= rowPosition + 80
     ) {
-      //check if mouse is in row 1
-      this.itemsRow0.forEach((item, index) => {
+      //check if mouse is in row
+      row.forEach((item, index) => {
         //loop through row
         if (
           item.x >= 45 &&
@@ -265,129 +260,25 @@ class Game {
           this.groceryList.forEach((groceryListItem, i) => {
             if (groceryListItem.name === item.name) {
               this.score++;
-              this.itemsRow0.splice(index, 1);
+              row.splice(index, 1);
               this.groceryList.splice(i, 1);
-            }
+            };
           });
-        }
+        };
       });
     };
-
-    if (
-      this.mouseX >= 45 &&
-      this.mouseX <= 270 &&
-      this.mouseY >= this.rows[1] &&
-      this.mouseY <= this.rows[1] + 80
-    ) {
-      //check if mouse is in row 2
-      this.itemsRow1.forEach((item, index) => {
-        //loop through row
-        if (
-          item.x >= 45 &&
-          item.x <= 270 &&
-          this.mouseX >= item.x &&
-          this.mouseX <= item.x + item.width &&
-          this.mouseY >= item.y &&
-          this.mouseY <= item.y + item.height
-        ) {
-          this.groceryList.forEach((groceryListItem, i) => {
-            if (groceryListItem.name === item.name) {
-              this.score++;
-              this.itemsRow1.splice(index, 1);
-              this.groceryList.splice(i, 1);
-            }
-          })
-          
-        }
-      });
-    }
-
-    if (
-      this.mouseX >= 45 &&
-      this.mouseX <= 270 &&
-      this.mouseY >= this.rows[2] &&
-      this.mouseY <= this.rows[2] + 80
-    ) {
-      //check if mouse is in row 3
-      this.itemsRow2.forEach((item, index) => {
-        //loop through row
-        if (
-          item.x >= 45 &&
-          item.x <= 270 &&
-          this.mouseX >= item.x &&
-          this.mouseX <= item.x + item.width &&
-          this.mouseY >= item.y &&
-          this.mouseY <= item.y + item.height
-        ) {
-          this.groceryList.forEach((groceryListItem, i) => {
-            if (groceryListItem.name === item.name) {
-              this.score++;
-              this.itemsRow2.splice(index, 1);
-              this.groceryList.splice(i, 1);
-            }
-          });
-        }
-      });
-    }
-
-    if (
-      this.mouseX >= 45 &&
-      this.mouseX <= 270 &&
-      this.mouseY >= this.rows[3] &&
-      this.mouseY <= this.rows[3] + 80
-    ) {
-      //check if mouse is in row 4
-      this.itemsRow3.forEach((item, index) => {
-        //loop through row
-        if (
-          item.x >= 45 &&
-          item.x <= 270 &&
-          this.mouseX >= item.x &&
-          this.mouseX <= item.x + item.width &&
-          this.mouseY >= item.y &&
-          this.mouseY <= item.y + item.height
-        ) {
-          this.groceryList.forEach((groceryListItem, i) => {
-            if (groceryListItem.name === item.name) {
-              this.score++;
-              this.itemsRow3.splice(index, 1);
-              this.groceryList.splice(i, 1);
-            }
-          });
-        }
-      });
-    }
-
-    if (
-      this.mouseX >= 45 &&
-      this.mouseX <= 270 &&
-      this.mouseY >= this.rows[4] &&
-      this.mouseY <= this.rows[4] + 80
-    ) {
-      //check if mouse is in row 5
-      this.itemsRow4.forEach((item, index) => {
-        //loop through row
-        if (
-          item.x >= 45 &&
-          item.x <= 270 &&
-          this.mouseX >= item.x &&
-          this.mouseX <= item.x + item.width &&
-          this.mouseY >= item.y &&
-          this.mouseY <= item.y + item.height
-        ) {
-          this.groceryList.forEach((groceryListItem, i) => {
-            if (groceryListItem.name === item.name) {
-              this.score++;
-              this.itemsRow4.splice(index, 1);
-              this.groceryList.splice(i, 1);
-            }
-          });
-        }
-      });
-    }
   }
 
-  //grocery list
+  //check mouse position with ALL rows of items
+  checkPositions() {
+    this.checkEachRowPositions(this.itemsRow0, this.rows[0]);
+    this.checkEachRowPositions(this.itemsRow1, this.rows[1]);
+    this.checkEachRowPositions(this.itemsRow2, this.rows[2]);
+    this.checkEachRowPositions(this.itemsRow3, this.rows[3]);
+    this.checkEachRowPositions(this.itemsRow4, this.rows[4]);
+  }
+
+  //generate grocery list
   generateList() {
     let item1 = document.querySelector(".item1");
     let item2 = document.querySelector(".item2");
@@ -415,5 +306,4 @@ class Game {
 
     scoreNum.innerHTML = this.score;
   }
-
 }
