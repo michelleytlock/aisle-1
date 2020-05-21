@@ -18,7 +18,9 @@ function main() {
   function createSplashScreen() {
     splashScreen = buildDom(`
         <main>
-            <embed loop="true" src="./sounds/splash-screen-music.mp3" hidden="true" type="audio/mpeg"></embed>
+            <audio autoplay loop>
+              <source src="./sounds/splash-screen-music.mp3" type="audio/mpeg">
+            </audio>
             <div class="splash">
                 <div id="title">
                     <h1>Aisle 1</h1>
@@ -27,8 +29,7 @@ function main() {
                     <h2>Instructions</h2>
                     <p>
                     Grab everything on your grocery list!<br>
-                    Click on the corresponding items within the time limit.<br>
-                    If you're not fast enough, game over! 
+                    Click on the corresponding items within the time limit.<br> 
                     </p>
                 </div>
                 <div class="input">
@@ -96,58 +97,71 @@ function main() {
 
   function createGameOverScreen(score) {
     let scoreRanking = JSON.parse(localStorage.getItem("score"));
-    console.log(scoreRanking);
-    console.log(scoreRanking[0].score)
     
-    let score1 = 0;
-    let score2 = 0;
-    let score3 = 0;
-    let score4 = 0;
-    let score5 = 0;
+    let score1;
+    let score2;
+    let score3;
+    let score4;
+    let score5;
 
     if (scoreRanking && scoreRanking[0]) {
-      score1 = scoreRanking[0].score;
-    } 
+      score1 = `${scoreRanking[0].name} : ${scoreRanking[0].score}`;
+    } else {
+      score1 = "Shopper : 0";
+    }
 
     if (scoreRanking && scoreRanking[1]) {
-      score2 = scoreRanking[1].score;
-    } 
+      score2 = `${scoreRanking[1].name} : ${scoreRanking[1].score}`;
+    } else {
+      score2 = "Shopper : 0";
+    }
 
     if (scoreRanking && scoreRanking[2]) {
-      score3 = scoreRanking[2].score;
-    } 
+      score3 = `${scoreRanking[2].name} : ${scoreRanking[2].score}`;
+    } else {
+      score3 = "Shopper : 0";
+    }
 
     if (scoreRanking && scoreRanking[3]) {
-      score4 = scoreRanking[3].score;
-    } 
+      score4 = `${scoreRanking[3].name} : ${scoreRanking[3].score}`;
+    } else {
+      score4 = "Shopper : 0";
+    }
 
     if (scoreRanking && scoreRanking[4]) {
-      score5 = scoreRanking[4].score;
-    } 
+      score5 = `${scoreRanking[1].name} : ${scoreRanking[1].score}`;
+    } else {
+      score5 = "Shopper : 0";
+    }
 
     gameOverScreen = buildDom(`
     <main>
-      <div class="game-over">
-        <div>
-          <h1>Game Over!</h1>
+      <div class="game-over-image">
+        <div class="game-over-content">
+          <div>
+            <h1>Game Over!</h1>
+          </div>
+          <div>
+            <h2>Your Score is: ${score}</h2>
+          </div>
+          <div class="scoreboard">
+            <h3>High Scores:</h3>
+            <ul>
+              <li>${score1}</li>
+              <li>${score2}</li>
+              <li>${score3}</li>
+              <li>${score4}</li>
+              <li>${score5}</li>
+            </ul>
+          </div>
+          <div class="input game-over">
+            <label for="name">Name:</label>
+            <input type="text" id="name" maxlength="24">
+          </div>
+          <div>
+            <button id="restart-button" class="button">Restart</button>
+          </div>
         </div>
-        <div>
-          <h2>Your Score is: ${score}</h2>
-        </div>
-        <div class="scoreboard">
-          <h2>High Scores:</h2>
-          <ul>
-            <li>${score1}</li>
-            <li>${score2}</li>
-            <li>${score3}</li>
-            <li>${score4}</li>
-            <li>${score5}</li>
-          </ul>
-        </div>
-        <div class="input">
-          <label for="name">Name:</label>
-          <input type="text" id="name" maxlength="24">
-          <button id="restart-button" class="button">Restart</button>
       </div>
     </main>`);
 
@@ -161,17 +175,17 @@ function main() {
   function removeGameOverScreen() {
     if (gameOverScreen !== undefined) {
       gameOverScreen.remove();
-      console.log('hi')
     }
   }
 
   //start the game
   function startGame() {
+    let inputName = '';
 
     if (!document.querySelector("input").value) {
-      inputName = "Needy Shopper";
+      inputName = "Shopper";
     } else {
-      inputName = document.querySelector("input".value);
+      inputName = document.querySelector("input").value;
     }
 
     removeSplashScreen();

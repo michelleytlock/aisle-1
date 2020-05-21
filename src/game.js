@@ -49,7 +49,7 @@ class Game {
     this.groceryList = []; //array that holds grocery list items player needs to search for
 
     this.score = 0;
-    this.time = 10;
+    this.time = 1;
 
     this.timerInterval;
     this.gameInterval;
@@ -315,12 +315,11 @@ class Game {
         if (!this.groceryList.includes(this.items[randomIndex])) {
           this.groceryList.push(this.items[randomIndex]);
         }
-    } else if (this.time == 0) {
+    } else if (this.time === 0) {
       clearInterval(this.timerInterval);
       clearInterval(this.gameInterval);
       this.gameOverCallback(this.score);
-      this.updateScore(this.inputName, this.score);
-      console.log(this.score)
+      this.updateScore(this.playerName, this.score);
     }
 
     if (this.groceryList[0]) { item1.src = this.groceryList[0].source }
@@ -335,35 +334,58 @@ class Game {
     scoreNum.innerHTML = this.score;
   }
 
-  updateScore(inputName, gameScore) {
-    
-    let previousScoreArray = JSON.parse(localStorage.getItem("score"));
+  updateScore(playerName, gameScore) {
 
-    let newScoreArray;
+    let scoreArray = JSON.parse(localStorage.getItem("score")) || [];
 
-    if (!previousScoreArray) {
-      newScoreArray = [];
-    } else {
-      newScoreArray = [...previousScoreArray];
+    let newScore = {
+      name: playerName,
+      score: gameScore
     }
 
-    let newScore = { name: inputName, score: gameScore };
-    newScoreArray.push(newScore);
+    scoreArray.push(newScore);
 
-    newScoreArray.sort((a, b) => {
+    scoreArray.sort((a, b) => {
       if (a.score < b.score) {
         return 1;
       } else if (a.score > b.score) {
         return -1;
       } else {
         return 0;
-      };
+      }
     });
 
-    if (newScoreArray.length > 5) {
-      newScoreArray.splice(0, 5);
-    }
+    scoreArray.splice(5);
 
-    localStorage.setItem("score", JSON.stringify(newScoreArray));
+    localStorage.setItem('score', JSON.stringify(scoreArray));
+    
+    // let previousScoreArray = JSON.parse(localStorage.getItem("score"));
+
+    // let newScoreArray;
+
+    // if (!previousScoreArray) {
+    //   newScoreArray = [];
+    // } else {
+    //   newScoreArray = [...previousScoreArray];
+    // }
+
+    // let newScore = { name: inputName, score: gameScore };
+    // newScoreArray.push(newScore);
+
+    // newScoreArray.sort((a, b) => {
+    //   if (a.score < b.score) {
+    //     return 1;
+    //   } else if (a.score > b.score) {
+    //     return -1;
+    //   } else {
+    //     return 0;
+    //   };
+    // });
+
+    // if (newScoreArray.length > 5) {
+    //   newScoreArray.splice(0, 5);
+    // }
+
+    // localStorage.setItem("score", JSON.stringify(newScoreArray));
   }
 }
