@@ -1,5 +1,5 @@
 class Game {
-  constructor(inputName) {
+  constructor(inputName, gameOverCallback) {
     this.canvas = null;
     this.ctx = null;
 
@@ -49,6 +49,17 @@ class Game {
     this.groceryList = []; //array that holds grocery list items player needs to search for
 
     this.score = 0;
+    this.time = 10;
+
+    this.timerInterval;
+    this.gameInterval;
+
+    this.gameOverCallback = gameOverCallback;
+
+    //Sounds
+    // this.music = new Audio("./sounds/game-screen-music.mp3");
+    // this.clickItem = new Audio("./sounds/click.ogg");
+    // this.timer = new Audio();
   }
 
   //master game starting function that's called in main.js
@@ -66,6 +77,7 @@ class Game {
 
     //draw everything else and start game animation
     this.startAnimation();
+    // this.music.play();
   }
 
   //draw everything: background, shopping cart, and items
@@ -221,9 +233,20 @@ class Game {
     this.generateScore();
   }
 
+  //timer function
+  startTimer() {
+    let timer = document.getElementById('timer');
+
+    this.timerInterval = setInterval(() => {
+      timer.innerHTML = 'Time Remaining: ' + this.time + 's';
+      this.time--;
+    }, 1000);
+  }
+
   //draw everything in intervals
   startAnimation() {
-    setInterval(() => {
+    this.startTimer();
+    this.gameInterval = setInterval(() => {
       window.requestAnimationFrame(() => {
         this.draw();
       });
@@ -286,12 +309,18 @@ class Game {
     let item4 = document.querySelector(".item4");
     let item5 = document.querySelector(".item5");
 
-    if (this.groceryList.length < 5) {
+    if (this.groceryList.length < 5 && this.time !== 0) {
       let randomIndex = Math.floor(Math.random() * this.items.length);
 
-      if (!this.groceryList.includes(this.items[randomIndex])) {
-        this.groceryList.push(this.items[randomIndex]);
-      }
+        if (!this.groceryList.includes(this.items[randomIndex])) {
+          this.groceryList.push(this.items[randomIndex]);
+        }
+    } else if (this.time == 0) {
+      clearInterval(this.timerInterval);
+      clearInterval(this.gameInterval);
+      this.gameOverCallback(this.score);
+      this.updateScore(this.inputName, this.score);
+      console.log(this.score)
     }
 
     if (this.groceryList[0]) { item1.src = this.groceryList[0].source }
@@ -303,7 +332,38 @@ class Game {
 
   generateScore() {
     let scoreNum = document.querySelector(".score");
-
     scoreNum.innerHTML = this.score;
+  }
+
+  updateScore(inputName, gameScore) {
+    
+    let previousScoreArray = JSON.parse(localStorage.getItem("score"));
+
+    let newScoreArray;
+
+    if (!previousScoreArray) {
+      newScoreArray = [];
+    } else {
+      newScoreArray = [...previousScoreArray];
+    }
+
+    let newScore = { name: inputName, score: gameScore };
+    newScoreArray.push(newScore);
+
+    newScoreArray.sort((a, b) => {
+      if (a.score < b.score) {
+        return 1;
+      } else if (a.score > b.score) {
+        return -1;
+      } else {
+        return 0;
+      };
+    });
+
+    if (newScoreArray.length > 5) {
+      newScoreArray.splice(0, 5);
+    }
+
+    localStorage.setItem("score", JSON.stringify(newScoreArray));
   }
 }

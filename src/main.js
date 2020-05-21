@@ -18,6 +18,7 @@ function main() {
   function createSplashScreen() {
     splashScreen = buildDom(`
         <main>
+            <embed loop="true" src="./sounds/splash-screen-music.mp3" hidden="true" type="audio/mpeg"></embed>
             <div class="splash">
                 <div id="title">
                     <h1>Aisle 1</h1>
@@ -44,8 +45,14 @@ function main() {
 
     let startButton = splashScreen.querySelector("#start-button");
 
+    function clickSound() {
+      let click = new Audio("./sounds/button.ogg");
+      click.play();
+    }
+
     startButton.addEventListener("click", function () {
       startGame();
+      clickSound();
     });
   }
 
@@ -61,7 +68,7 @@ function main() {
         <h1>Aisle 1</h1>
         <div class="game-content">
           <div class="shopping-list">
-            <h3>Time:</h3><span class="time"></span>
+            <h3 id="timer">Time Remaining: 60s</h3>
             <h3>Score:</h3><span class="score"></span>
             <h2>Grocery List</h2>
             <ul>
@@ -88,6 +95,36 @@ function main() {
   }
 
   function createGameOverScreen(score) {
+    let scoreRanking = JSON.parse(localStorage.getItem("score"));
+    console.log(scoreRanking);
+    console.log(scoreRanking[0].score)
+    
+    let score1 = 0;
+    let score2 = 0;
+    let score3 = 0;
+    let score4 = 0;
+    let score5 = 0;
+
+    if (scoreRanking && scoreRanking[0]) {
+      score1 = scoreRanking[0].score;
+    } 
+
+    if (scoreRanking && scoreRanking[1]) {
+      score2 = scoreRanking[1].score;
+    } 
+
+    if (scoreRanking && scoreRanking[2]) {
+      score3 = scoreRanking[2].score;
+    } 
+
+    if (scoreRanking && scoreRanking[3]) {
+      score4 = scoreRanking[3].score;
+    } 
+
+    if (scoreRanking && scoreRanking[4]) {
+      score5 = scoreRanking[4].score;
+    } 
+
     gameOverScreen = buildDom(`
     <main>
       <div class="game-over">
@@ -100,11 +137,11 @@ function main() {
         <div class="scoreboard">
           <h2>High Scores:</h2>
           <ul>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
+            <li>${score1}</li>
+            <li>${score2}</li>
+            <li>${score3}</li>
+            <li>${score4}</li>
+            <li>${score5}</li>
           </ul>
         </div>
         <div class="input">
@@ -124,11 +161,13 @@ function main() {
   function removeGameOverScreen() {
     if (gameOverScreen !== undefined) {
       gameOverScreen.remove();
+      console.log('hi')
     }
   }
 
   //start the game
   function startGame() {
+
     if (!document.querySelector("input").value) {
       inputName = "Needy Shopper";
     } else {
@@ -138,22 +177,25 @@ function main() {
     removeSplashScreen();
     removeGameOverScreen();
 
-    game = new Game(inputName);
+    game = new Game(inputName, gameOver);
     game.gameScreen = createGameScreen();
-
+    
     game.start();
-
+    
     game.canvas.addEventListener("mousedown", function (e) {
       game.getMousePosition(game.canvas, e);
       game.checkPositions();
+      // game.clickItem.play();
     });
   }
 
-  function gameOver() {
-    removeGameOverScreen();
-    createGameOverScreen(this.score);
+  function gameOver(score) {
+    removeGameScreen();
+    createGameOverScreen(score);
   }
+
   createSplashScreen(); //call Splash Screen at beginning with main()
 }
+
 //execute function main() once page loads
 window.addEventListener("load", main);
