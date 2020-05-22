@@ -310,8 +310,8 @@ class Game {
       clearInterval(this.timerInterval);
       clearInterval(this.gameInterval);
       this.music.pause();
-      this.gameOverCallback(this.score);
       this.updateScore(this.playerName, this.score);
+      this.gameOverCallback(this.score);
     }
 
     if (this.groceryList[0]) { item1.src = this.groceryList[0].source }

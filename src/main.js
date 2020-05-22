@@ -132,7 +132,7 @@ function main() {
     }
 
     if (scoreRanking && scoreRanking[4]) {
-      score5 = `${scoreRanking[1].name} : ${scoreRanking[1].score}`;
+      score5 = `${scoreRanking[4].name} : ${scoreRanking[4].score}`;
     } else {
       score5 = "Shopper : 0";
     }
@@ -174,7 +174,7 @@ function main() {
     document.body.appendChild(gameOverScreen);
 
     let music = document.getElementById("game-over-music");
-    music.volume = 0.1;
+    music.volume = 0.05;
 
     let button = gameOverScreen.querySelector("button");
 
