@@ -241,7 +241,7 @@ class Game {
       window.requestAnimationFrame(() => {
         this.draw();
       });
-    }, 25);
+    }, 15);
   }
 
   // get mouse coordinates

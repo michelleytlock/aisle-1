@@ -47,7 +47,7 @@ function main() {
     let startButton = splashScreen.querySelector("#start-button");
 
     let music = document.getElementById("splash-screen-music");
-    music.volume = 0.2;
+    music.volume = 0.3;
 
     function clickSound() {
       let click = new Audio("./sounds/button.ogg");

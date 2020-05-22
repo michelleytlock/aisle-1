@@ -83,7 +83,6 @@ Definition of the different states and their transition (transition functions)
 [Link Url](https://trello.com/b/Sq0xQB4e/aisle-1)
 
 ### Git
-URIs for the project repo and deploy
 [Link Repo](https://github.com/michelleytlock/aisle-1)
 [Link Deploy](https://michelleytlock.github.io/aisle-1/)
 
