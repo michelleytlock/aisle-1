@@ -15,6 +15,7 @@ function main() {
   let game;
   let splashScreen;
   let gameOverScreen;
+  
 
   // create splash screen
   function createSplashScreen() {
@@ -44,7 +45,6 @@ function main() {
     document.body.appendChild(splashScreen);
 
     let startButton = splashScreen.querySelector("#start-button");
-
     
     splashScreenMusic.volume = 0.3;
     splashScreenMusic.loop = true;
