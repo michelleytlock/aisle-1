@@ -60,7 +60,7 @@ class Game {
     this.music = new Audio("./sounds/game-screen-music.mp3");
     this.music.volume = 0.1;
     this.music.loop = true;
-    this.clickItem = new Audio("./sounds/click.ogg");
+    this.clickItem = new Audio("./sounds/clicking.ogg");
   }
 
   //master game starting function that's called in main.js
@@ -273,6 +273,7 @@ class Game {
         ) {
           this.groceryList.forEach((groceryListItem, i) => {
             if (groceryListItem.name === item.name) {
+              this.clickItem.play();
               this.score++;
               row.splice(index, 1);
               this.groceryList.splice(i, 1);

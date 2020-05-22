@@ -72,7 +72,7 @@ function main() {
         <h1>Aisle 1</h1>
         <div class="game-content">
           <div class="shopping-list">
-            <h3 id="timer">Time Remaining: 60s</h3>
+            <h3 id="timer">Time Remaining: 30s</h3>
             <h3>Score:</h3><span class="score"></span>
             <h2>Grocery List</h2>
             <ul>
