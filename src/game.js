@@ -220,8 +220,8 @@ class Game {
   draw() {
     this.moveItems();
     this.drawElements();
-    this.generateList();
     this.generateScore();
+    this.generateList();
   }
 
   //timer function

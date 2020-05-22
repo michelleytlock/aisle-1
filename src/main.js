@@ -10,7 +10,6 @@ function buildDom(htmlString) {
 //Main game to load onto page
 function main() {
   let game;
-  let inputName;
   let splashScreen;
   let gameOverScreen;
 
