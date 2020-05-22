@@ -1,5 +1,8 @@
 "use strict";
 
+let splashScreenMusic = new Audio("./sounds/splash-screen-music.mp3");
+let gameOverMusic = new Audio("./sounds/game-over-screen-music.mp3");
+
 //buildDOM function
 function buildDom(htmlString) {
   var div = document.createElement("div");
@@ -17,9 +20,6 @@ function main() {
   function createSplashScreen() {
     splashScreen = buildDom(`
         <main>
-            <audio autoplay loop id="splash-screen-music">
-              <source src="./sounds/splash-screen-music.mp3" type="audio/mpeg">
-            </audio>
             <div class="splash">
                 <div id="title">
                     <h1>Aisle 1</h1>
@@ -45,8 +45,10 @@ function main() {
 
     let startButton = splashScreen.querySelector("#start-button");
 
-    let music = document.getElementById("splash-screen-music");
-    music.volume = 0.3;
+    
+    splashScreenMusic.volume = 0.3;
+    splashScreenMusic.loop = true;
+    splashScreenMusic.play();
 
     function clickSound() {
       let click = new Audio("./sounds/button.ogg");
@@ -62,6 +64,7 @@ function main() {
   //take away splash screen
   function removeSplashScreen() {
     splashScreen.remove();
+    splashScreenMusic.pause();
   }
 
   //create game screen
@@ -138,9 +141,6 @@ function main() {
 
     gameOverScreen = buildDom(`
     <main>
-      <audio autoplay loop id="game-over-music">
-          <source src="./sounds/game-over-screen-music.mp3" type="audio/mpeg" >
-      </audio>
       <div class="game-over-image">
         <div class="game-over-content">
           <div>
@@ -172,8 +172,9 @@ function main() {
 
     document.body.appendChild(gameOverScreen);
 
-    let music = document.getElementById("game-over-music");
-    music.volume = 0.05;
+    gameOverMusic.volume = 0.05;
+    gameOverMusic.loop = true;
+    gameOverMusic.play();
 
     let button = gameOverScreen.querySelector("button");
 
@@ -191,6 +192,7 @@ function main() {
   function removeGameOverScreen() {
     if (gameOverScreen !== undefined) {
       gameOverScreen.remove();
+      gameOverMusic.pause();
     }
   }
 
