@@ -28,8 +28,8 @@ function main() {
                 <div id="instructions">
                     <h2>Instructions</h2>
                     <p>
-                    Grab everything on your grocery list!<br>
-                    Click on the corresponding items within the time limit.<br> 
+                    Grab everything on your grocery list! Click on the corresponding items within the time limit.<br>
+                    <b>Make sure you're only clicking on items when they are above your shopping cart!</b>
                     </p>
                 </div>
                 <div class="input">
